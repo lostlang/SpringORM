@@ -15,7 +15,7 @@ data class Player (
 
     @OneToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "rank", referencedColumnName = "rank_id")
-    val rank: Rank,
+    var rank: Rank,
 
     @ManyToMany(fetch = FetchType.LAZY)
     @JoinColumn(name = "pets", referencedColumnName = "pet_id")
