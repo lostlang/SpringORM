@@ -2,6 +2,7 @@ package ru.sber.orm.entity
 
 import javax.persistence.*
 
+
 @Table(name = "ranks")
 @Entity
 data class Rank (
