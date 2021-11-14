@@ -49,6 +49,14 @@ class OrmApplication(
         )
 
         playerRepository.saveAll(players)
+
+        println(rankRepository.findById(1).get())
+        println(rankRepository.findById(2).get())
+
+        println(petRepository.findById(1).get())
+        println(petRepository.findById(2).get())
+
+        println(playerRepository.findById(1).get().rank)
     }
 }
 
