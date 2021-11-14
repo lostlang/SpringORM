@@ -20,4 +20,14 @@ data class Player (
     @ManyToMany(fetch = FetchType.LAZY)
     @JoinColumn(name = "pets", referencedColumnName = "pet_id")
     val pets: MutableList<Pet> = mutableListOf()
-)
+) {
+    override fun equals(other: Any?): Boolean {
+        return false
+    }
+
+    override fun hashCode() = 0
+
+    override fun toString(): String {
+        return this.javaClass.simpleName
+    }
+}
