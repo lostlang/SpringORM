@@ -9,27 +9,27 @@ import ru.sber.orm.entity.Rank
 import ru.sber.orm.repository.PetRepository
 import ru.sber.orm.repository.PlayerRepository
 import ru.sber.orm.repository.RankRepository
+import org.hibernate.cfg.Configuration
 
 @SpringBootApplication
 class OrmApplication(
-    private val petRepository: PetRepository,
-    private val rankRepository: RankRepository,
-    private val playerRepository: PlayerRepository
 ) : CommandLineRunner {
     override fun run(vararg args: String?) {
+        val sessionFactory = Configuration().configure()
+            .addAnnotatedClass(Pet::class.java)
+            .addAnnotatedClass(Player::class.java)
+            .addAnnotatedClass(Rank::class.java)
+            .buildSessionFactory()
+
         val pets: MutableList<Pet> = mutableListOf()
 
         pets.add(Pet(name = "Eevee"))
         pets.add(Pet(name = "Pikachu"))
         pets.add(Pet(name = "Ponita"))
 
-        petRepository.saveAll(pets)
-
         val ranks: MutableList<Rank> = mutableListOf()
         ranks.add(Rank(name = "Noob"))
         ranks.add(Rank(name = "Pro"))
-
-        rankRepository.saveAll(ranks)
 
         val players: MutableList<Player> = mutableListOf()
         players.add(
@@ -48,18 +48,15 @@ class OrmApplication(
             )
         )
 
-        playerRepository.saveAll(players)
+        sessionFactory.use {
+            val playerRepository = PlayerRepository(it)
 
-        println(rankRepository.findById(1).get())
-        println(rankRepository.findById(2).get())
-
-        println(petRepository.findById(1).get())
-        println(petRepository.findById(2).get())
-
-        println(playerRepository.findById(1).get().rank)
+            println(playerRepository.findById(1)!!.name)
+        }
     }
 }
 
 fun main(args: Array<String>) {
+
     runApplication<OrmApplication>(*args)
 }
